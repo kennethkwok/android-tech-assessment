@@ -1,9 +1,9 @@
-package com.pelagohealth.codingchallenge.data
+package com.pelagohealth.codingchallenge.di
 
 /**
  * Hilt module that provides dependencies for the data layer.
  */
-class DataModule {
+class FactsApiModule {
 
     // Base URL for the REST API: https://uselessfacts.jsph.pl/api/v2
 

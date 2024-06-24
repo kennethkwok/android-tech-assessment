@@ -1,6 +1,6 @@
-package com.pelagohealth.codingchallenge.data.repository
+package com.pelagohealth.codingchallenge.repository
 
-import com.pelagohealth.codingchallenge.domain.model.Fact
+import com.pelagohealth.codingchallenge.repository.model.Fact
 
 /**
  * Repository providing random facts.

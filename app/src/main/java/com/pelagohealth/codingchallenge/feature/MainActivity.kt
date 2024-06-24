@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pelagohealth.codingchallenge.presentation.MainViewModel
+import com.pelagohealth.codingchallenge.feature.MainViewModel
 import com.pelagohealth.codingchallenge.ui.theme.PelagoCodingChallengeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
