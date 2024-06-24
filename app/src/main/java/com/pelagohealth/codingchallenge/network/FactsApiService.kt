@@ -7,7 +7,6 @@ import retrofit2.http.GET
  * REST API for fetching random facts.
  */
 interface FactsApiService {
-
     @GET("/facts/random")
     suspend fun getFact(): FactDTO
 }

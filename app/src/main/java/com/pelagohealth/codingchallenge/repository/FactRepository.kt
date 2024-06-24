@@ -1,14 +1,11 @@
 package com.pelagohealth.codingchallenge.repository
 
 import com.pelagohealth.codingchallenge.repository.model.Fact
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository providing random facts.
+ * Interface defining the contract for providing random facts.
  */
-class FactRepository {
-    
-    fun get(): Fact {
-        TODO("Not yet implemented")
-    }
-
+interface FactRepository {
+    fun getRandomFact(): Flow<Fact>
 }
