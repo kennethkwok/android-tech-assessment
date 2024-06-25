@@ -2,6 +2,7 @@ package com.pelagohealth.codingchallenge.di
 
 import com.pelagohealth.codingchallenge.network.FactsApiService
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +19,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 object FactsApiModule {
-    private const val BASE_URL = "https://uselessfacts.jsph.pl/api/v2"
+    private const val BASE_URL = "https://uselessfacts.jsph.pl/api/v2/"
 
     @Singleton
     @Provides
@@ -37,9 +38,12 @@ object FactsApiModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi,
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(okHttpClient)
         .build()
 
@@ -49,5 +53,5 @@ object FactsApiModule {
 
     @Singleton
     @Provides
-    fun provideMoshi(): Moshi = Moshi.Builder().build()
+    fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 }

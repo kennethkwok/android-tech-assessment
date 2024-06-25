@@ -68,6 +68,7 @@ dependencies {
     implementation("androidx.core:core-ktx:$core_version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:$lifecycle_version")
     implementation("androidx.activity:activity-ktx:$activity_version")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version")
@@ -89,6 +90,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
     implementation("com.squareup.moshi:moshi:$moshi_version")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_interceptor_version")
 
     // Hilt
