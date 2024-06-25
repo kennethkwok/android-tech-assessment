@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -56,11 +58,12 @@ dependencies {
     val retrofit_version = "2.11.0"
     val moshi_version = "1.15.1"
     val okhttp_interceptor_version = "4.12.0"
-    val hilt_version = "2.45"
+    val hilt_version = "2.51.1"
     val timber_version = "5.0.1"
     val junit_version = "4.13.2"
     val androidx_junit_version = "1.2.0"
     val espresso_version = "3.6.0"
+    val hilt_navigation_compose_version = "1.2.0"
 
     implementation("androidx.core:core-ktx:$core_version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
@@ -82,7 +85,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
@@ -91,6 +93,8 @@ dependencies {
 
     // Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    implementation("androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version")
 
     // Logging
     implementation("com.jakewharton.timber:timber:$timber_version")
@@ -107,4 +111,8 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+
+kapt {
+    correctErrorTypes = true
 }
