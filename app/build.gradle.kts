@@ -37,6 +37,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -64,6 +65,7 @@ dependencies {
     val androidx_junit_version = "1.2.0"
     val espresso_version = "3.6.0"
     val hilt_navigation_compose_version = "1.2.0"
+    val room_version = "2.6.1"
 
     implementation("androidx.core:core-ktx:$core_version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
@@ -100,6 +102,12 @@ dependencies {
 
     // Logging
     implementation("com.jakewharton.timber:timber:$timber_version")
+
+    // Room database
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 
     // Unit testing
     testImplementation("junit:junit:$junit_version")

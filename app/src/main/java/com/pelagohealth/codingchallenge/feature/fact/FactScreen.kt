@@ -42,7 +42,7 @@ fun FactScreen(viewModel: FactViewModel) {
                     Text(
                         modifier = Modifier
                             .padding(horizontal = 32.dp, vertical = 16.dp),
-                        text = uiState.fact ?: "",
+                        text = uiState.fact?.text ?: "",
                         textAlign = TextAlign.Center
                     )
                 }

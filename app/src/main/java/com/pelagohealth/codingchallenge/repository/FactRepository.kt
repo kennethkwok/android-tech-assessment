@@ -8,4 +8,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface FactRepository {
     fun getRandomFact(): Flow<Fact>
+
+    suspend fun storeFactInDatabase(fact: Fact)
 }

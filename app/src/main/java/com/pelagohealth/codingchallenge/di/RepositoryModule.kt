@@ -18,4 +18,4 @@ internal interface RepositoryModule {
     @Binds
     @Singleton
     fun bindsFactRepository(factRepository: FactRepositoryImpl): FactRepository
-}
+} 

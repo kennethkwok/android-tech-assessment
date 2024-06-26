@@ -3,6 +3,7 @@ package com.pelagohealth.codingchallenge.feature.fact
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pelagohealth.codingchallenge.repository.FactRepository
+import com.pelagohealth.codingchallenge.repository.model.Fact
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +26,7 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
 
     fun fetchNewFact() {
         viewModelScope.launch {
+            _factUIState.value.fact?.let { factRepository.storeFactInDatabase(it) }
             getRandomFact()
         }
     }
@@ -34,12 +36,12 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
 
         factRepository.getRandomFact().collect { fact ->
             Timber.d(fact.toString())
-            _factUIState.update { it.copy(loading = false, fact = fact.text) }
+            _factUIState.update { it.copy(loading = false, fact = fact) }
         }
     }
 }
 
 data class FactUIState (
     val loading: Boolean = false,
-    val fact: String? = null,
+    val fact: Fact? = null,
 )
