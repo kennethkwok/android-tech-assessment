@@ -15,11 +15,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pelagohealth.codingchallenge.R
+import com.pelagohealth.codingchallenge.repository.model.Fact
 import com.pelagohealth.codingchallenge.ui.theme.PelagoCodingChallengeTheme
 
 private const val HORIZONTAL_PADDING = 32
@@ -39,9 +43,13 @@ fun FactScreen(viewModel: FactViewModel) {
     val uiState: FactUIState by viewModel.factUIState.collectAsStateWithLifecycle()
 
     PelagoCodingChallengeTheme {
-        Scaffold { paddingValues ->
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+        ) {
             LazyColumn(
-                modifier = Modifier.padding(paddingValues).fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
             ) {
                 item {
                     Row(
@@ -67,13 +75,14 @@ fun FactScreen(viewModel: FactViewModel) {
                         previousFacts,
                         key = { fact -> fact.id },
                     ) { fact ->
-                        ListItem(
-                            modifier = Modifier.animateItemPlacement(),
-                            headlineContent = {
-                                Text(fact.text)
-                            },
-                        )
-                        HorizontalDivider(modifier = Modifier.animateItemPlacement())
+                        PreviousFactItem(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp, horizontal = 16.dp)
+                                .animateItemPlacement(),
+                            fact = fact,
+                        ) {
+                            viewModel.removeFact(fact)
+                        }
                     }
                 }
             }
@@ -111,5 +120,43 @@ private fun CurrentFact(
         }
 
         Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PreviousFactItem(
+    modifier: Modifier,
+    fact: Fact,
+    onDismiss: () -> Unit
+) {
+    val dismissBoxState = rememberSwipeToDismissBoxState(
+        positionalThreshold = { it * 0.2f },
+        confirmValueChange = {
+            when (it) {
+                SwipeToDismissBoxValue.StartToEnd -> onDismiss()
+                SwipeToDismissBoxValue.EndToStart -> onDismiss()
+                SwipeToDismissBoxValue.Settled -> return@rememberSwipeToDismissBoxState false
+            }
+            return@rememberSwipeToDismissBoxState true
+        }
+    )
+
+    SwipeToDismissBox(
+        modifier = modifier,
+        state = dismissBoxState,
+        backgroundContent = {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                content = {},
+            )
+        },
+    ) {
+        ListItem(
+            shadowElevation = 4.dp,
+            headlineContent = {
+                Text(fact.text)
+            },
+        )
     }
 }

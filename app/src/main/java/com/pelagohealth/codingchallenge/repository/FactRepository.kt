@@ -12,4 +12,6 @@ interface FactRepository {
     suspend fun storeFactInDatabase(fact: Fact)
 
     fun getFactsFromDatabase(number: Int): Flow<List<Fact>>
+
+    suspend fun removeFactFromDatabase(fact: Fact)
 }

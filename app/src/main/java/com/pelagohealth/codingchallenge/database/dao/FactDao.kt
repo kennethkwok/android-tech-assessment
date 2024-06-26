@@ -16,6 +16,6 @@ interface FactDao {
     @Query("select * from facts order by timestamp desc limit :number")
     suspend fun getFacts(number: Int): List<FactEntity>
 
-    @Delete
-    suspend fun deleteFact(fact: FactEntity)
+    @Query("delete from facts where id = :id")
+    suspend fun deleteFact(id: String)
 }

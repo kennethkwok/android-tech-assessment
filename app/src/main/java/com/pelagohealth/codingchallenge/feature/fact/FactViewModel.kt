@@ -31,6 +31,13 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
         }
     }
 
+    fun removeFact(fact: Fact) {
+        viewModelScope.launch {
+            factRepository.removeFactFromDatabase(fact)
+            getFactsFromDatabase()
+        }
+    }
+
     private suspend fun getRandomFact() {
         _factUIState.update { it.copy(loading = true) }
 
@@ -39,6 +46,10 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
             _factUIState.update { it.copy(loading = false, fact = fact) }
         }
 
+        getFactsFromDatabase()
+    }
+
+    private suspend fun getFactsFromDatabase() {
         factRepository.getFactsFromDatabase(3).collect { facts ->
             Timber.d(facts.toString())
             _factUIState.update { it.copy(storedFacts = facts) }

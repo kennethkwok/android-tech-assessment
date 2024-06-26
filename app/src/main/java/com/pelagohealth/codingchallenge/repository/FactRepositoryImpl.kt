@@ -3,11 +3,9 @@ package com.pelagohealth.codingchallenge.repository
 import com.pelagohealth.codingchallenge.database.dao.FactDao
 import com.pelagohealth.codingchallenge.database.model.FactEntity
 import com.pelagohealth.codingchallenge.network.FactsApiService
-import com.pelagohealth.codingchallenge.network.model.FactDTO
 import com.pelagohealth.codingchallenge.repository.model.Fact
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
@@ -56,4 +54,9 @@ class FactRepositoryImpl @Inject constructor(
 
         emit(facts)
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun removeFactFromDatabase(fact: Fact) {
+        factDao.deleteFact(fact.id)
+        Timber.d("Fact removed from database: $fact")
+    }
 }
