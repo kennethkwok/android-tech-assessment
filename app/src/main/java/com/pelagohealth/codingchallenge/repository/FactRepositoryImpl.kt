@@ -7,6 +7,7 @@ import com.pelagohealth.codingchallenge.network.model.FactDTO
 import com.pelagohealth.codingchallenge.repository.model.Fact
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
@@ -26,8 +27,7 @@ class FactRepositoryImpl @Inject constructor(
 
             val fact = Fact(
                 id = factDto?.id ?: "",
-                text = factDto?.text ?: "",
-                url = factDto?.permalink ?: "",
+                text = factDto?.text ?: ""
             )
 
             emit(fact)
@@ -37,12 +37,23 @@ class FactRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     override suspend fun storeFactInDatabase(fact: Fact) {
+        val timestamp = System.currentTimeMillis()
+
         val factEntity = FactEntity(
             id = fact.id,
-            text = fact.text
+            text = fact.text,
+            timestamp = timestamp
         )
 
         factDao.insertFact(factEntity)
         Timber.d("Fact stored in database: $fact")
     }
+
+    override fun getFactsFromDatabase(number: Int) = flow {
+        val facts = factDao
+            .getFacts(number)
+            .map { Fact(id = it.id, text = it.text ?: "") }
+
+        emit(facts)
+    }.flowOn(Dispatchers.IO)
 }

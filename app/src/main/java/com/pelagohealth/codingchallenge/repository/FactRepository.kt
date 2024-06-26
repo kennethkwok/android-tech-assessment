@@ -10,4 +10,6 @@ interface FactRepository {
     fun getRandomFact(): Flow<Fact>
 
     suspend fun storeFactInDatabase(fact: Fact)
+
+    fun getFactsFromDatabase(number: Int): Flow<List<Fact>>
 }

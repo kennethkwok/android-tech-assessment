@@ -13,7 +13,7 @@ interface FactDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFact(fact: FactEntity)
 
-    @Query("select * from facts order by id desc limit :number")
+    @Query("select * from facts order by timestamp desc limit :number")
     suspend fun getFacts(number: Int): List<FactEntity>
 
     @Delete

@@ -38,10 +38,16 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
             Timber.d(fact.toString())
             _factUIState.update { it.copy(loading = false, fact = fact) }
         }
+
+        factRepository.getFactsFromDatabase(3).collect { facts ->
+            Timber.d(facts.toString())
+            _factUIState.update { it.copy(storedFacts = facts) }
+        }
     }
 }
 
 data class FactUIState (
     val loading: Boolean = false,
     val fact: Fact? = null,
+    val storedFacts: List<Fact>? = null,
 )

@@ -8,4 +8,5 @@ import androidx.room.PrimaryKey
 data class FactEntity (
     @PrimaryKey val id: String,
     @ColumnInfo(name = "factText") val text: String?,
+    @ColumnInfo(name = "timestamp") val timestamp: Long,
 )
