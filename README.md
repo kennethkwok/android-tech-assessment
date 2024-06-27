@@ -1,6 +1,6 @@
 # Pelago Android Challenge
 
-This is a skeleton project for our Android coding challenge, based around the following tech stack:
+This is a project for the Pelago Android coding challenge, based around the following tech stack:
 
 - Kotlin
 - MVVM
@@ -9,8 +9,23 @@ This is a skeleton project for our Android coding challenge, based around the fo
 - Hilt
 - Retrofit
 
-Feel free to change the project structure as you see fit, or add any dependencies you think are necessary to complete
-the challenge.
+## Summary of architecture
+This app has been built with Compose and MVVM. The ViewModel communicates with the repository 
+layer which fetches facts from the API using Retrofit. Facts which are displayed to the user are 
+persisted (based on ACs defined below) in local storage using the Room library. There is no real 
+navigation to other screens required in the app, but should that be needed in the future it can 
+easily be added to AppNavGraph file (which uses Compose NavHost).
+
+## Testing
+Unit tests and Instrumented test are included. Detekt is also included for catching code smells .
+
+## Additional notes
+Some basic form of error handling has also been built despite it not being part of the ACs. This 
+covers the basic scenarios where the API cannot be reached / network error occurs / user has 
+airplane mode switched on.
+
+A data class has intentionally been chosen to represent the UI state rather than a sealed class. 
+This allows for greater flexibility in dealing with various combinations of states which can occur.
 
 ## Challenge
 
