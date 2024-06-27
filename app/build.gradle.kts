@@ -16,7 +16,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.pelagohealth.codingchallenge.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -45,6 +45,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    sourceSets {
+        getByName("test") {
+            resources.srcDirs("src/androidTest/assets")
         }
     }
 }
@@ -127,9 +132,15 @@ dependencies {
     androidTestImplementation(platform("androidx.compose:compose-bom:$compose_bom_version"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hilt_version")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$hilt_version")
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:$okhttp_interceptor_version")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Do not change this as this will break UI tests - https://github.com/android/android-test/issues/1755
+    debugImplementation("androidx.tracing:tracing:1.1.0")
 }
 
 kapt {

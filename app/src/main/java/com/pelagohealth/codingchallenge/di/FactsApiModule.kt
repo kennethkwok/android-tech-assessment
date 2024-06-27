@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,7 +20,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 object FactsApiModule {
-    private const val BASE_URL = "https://uselessfacts.jsph.pl/api/v2/"
 
     @Singleton
     @Provides
@@ -39,10 +39,11 @@ object FactsApiModule {
     @Singleton
     @Provides
     fun provideRetrofit(
+        @Named("BaseUrl") baseUrl: String,
         okHttpClient: OkHttpClient,
         moshi: Moshi,
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(baseUrl)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(okHttpClient)
         .build()

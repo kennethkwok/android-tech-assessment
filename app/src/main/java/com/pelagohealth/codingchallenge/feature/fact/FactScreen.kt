@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,13 @@ import com.pelagohealth.codingchallenge.repository.model.ErrorType
 import com.pelagohealth.codingchallenge.repository.model.Fact
 import com.pelagohealth.codingchallenge.ui.theme.PelagoCodingChallengeTheme
 import com.pelagohealth.codingchallenge.ui.theme.Typography
+
+const val LOADING_SPINNER = "loading_spinner"
+const val CURRENT_FACT = "current_fact"
+const val BUTTON_MORE_FACTS = "button_more_facts"
+const val LIST_PREVIOUS_FACTS_HEADING = "list_previous_facts_heading"
+const val LIST_PREVIOUS_FACTS_ITEM = "list_previous_facts_item"
+const val LIST_PREVIOUS_FACTS_ITEM_INNER = "list_previous_facts_item_inner"
 
 private const val CURRENT_FACT_HORIZONTAL_PADDING = 32
 private const val PREVIOUS_FACT_HORIZONTAL_PADDING = 16
@@ -82,6 +90,7 @@ fun FactScreen(viewModel: FactViewModel) {
                         Text(
                             stringResource(id = R.string.title_previous_viewed_facts),
                             modifier = Modifier
+                                .testTag(LIST_PREVIOUS_FACTS_HEADING)
                                 .padding(
                                     horizontal = PREVIOUS_FACT_HORIZONTAL_PADDING.dp,
                                     vertical = 8.dp
@@ -96,7 +105,9 @@ fun FactScreen(viewModel: FactViewModel) {
                     key = { fact -> fact.id },
                 ) { fact ->
                     PreviousFactItem(
-                        modifier = Modifier.animateItemPlacement(),
+                        modifier = Modifier
+                            .testTag(LIST_PREVIOUS_FACTS_ITEM.plus(" ${fact.id}"))
+                            .animateItemPlacement(),
                         fact = fact,
                     ) {
                         viewModel.removeFact(fact)
@@ -124,7 +135,7 @@ private fun CurrentFact(
 
             if (isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(ICON_SIZE.dp),
+                    modifier = Modifier.testTag(LOADING_SPINNER).size(ICON_SIZE.dp),
                     color = MaterialTheme.colorScheme.secondary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
@@ -144,6 +155,7 @@ private fun CurrentFact(
                 }
             } else {
                 Text(
+                    modifier = Modifier.testTag(CURRENT_FACT),
                     text = fact,
                     textAlign = TextAlign.Center
                 )
@@ -153,6 +165,7 @@ private fun CurrentFact(
         Spacer(modifier = Modifier.height((SPACER_HEIGHT / 2).dp))
 
         Button(
+            modifier = Modifier.testTag(BUTTON_MORE_FACTS),
             enabled = !isLoading,
             onClick = onClickMoreFacts,
         ) {
@@ -194,6 +207,7 @@ private fun PreviousFactItem(
         },
     ) {
         ListItem(
+            modifier = Modifier.testTag(LIST_PREVIOUS_FACTS_ITEM_INNER.plus(" 1")),
             shadowElevation = 4.dp,
             headlineContent = {
                 Text(fact.text)
