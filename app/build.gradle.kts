@@ -66,6 +66,10 @@ dependencies {
     val espresso_version = "3.6.0"
     val hilt_navigation_compose_version = "1.2.0"
     val room_version = "2.6.1"
+    val mockk_version = "1.13.11"
+    val kotlinx_coroutines_test_version = "1.8.1"
+    val core_testing_version = "2.2.0"
+    val turbine_version = "1.1.0"
 
     implementation("androidx.core:core-ktx:$core_version")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
@@ -111,6 +115,11 @@ dependencies {
 
     // Unit testing
     testImplementation("junit:junit:$junit_version")
+    testImplementation("io.mockk:mockk:$mockk_version")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinx_coroutines_test_version")
+    testImplementation("androidx.arch.core:core-testing:$core_testing_version")
+    testImplementation("app.cash.turbine:turbine:$turbine_version")
+    testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp_interceptor_version")
 
     // UI testing
     androidTestImplementation("androidx.test.ext:junit:$androidx_junit_version")

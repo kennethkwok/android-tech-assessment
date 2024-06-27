@@ -35,7 +35,7 @@ class FactRepositoryImpl @Inject constructor(
 
                 emit(Resource.Success(fact))
             } else {
-                emit(Resource.Error(ErrorType.Unknown))
+                emit(Resource.Error(response.code().toErrorType()))
             }
         } catch (e: Exception) {
             emit(Resource.Error(e.toErrorType()))

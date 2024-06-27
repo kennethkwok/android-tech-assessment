@@ -21,15 +21,16 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
     val factUIState = _factUIState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            getRandomFact()
-        }
+        // Retrieve facts in parallel
+        viewModelScope.launch { getRandomFact() }
+        viewModelScope.launch { getFactsFromDatabase() }
     }
 
     fun fetchNewFact() {
         viewModelScope.launch {
             _factUIState.value.fact?.let { factRepository.storeFactInDatabase(it) }
             getRandomFact()
+            getFactsFromDatabase()
         }
     }
 
@@ -55,7 +56,6 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
                 }
             }
         }
-        getFactsFromDatabase()
     }
 
     private suspend fun getFactsFromDatabase() {
