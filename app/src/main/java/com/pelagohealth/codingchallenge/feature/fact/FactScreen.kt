@@ -1,7 +1,8 @@
 package com.pelagohealth.codingchallenge.feature.fact
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -36,6 +36,7 @@ import com.pelagohealth.codingchallenge.repository.model.Fact
 import com.pelagohealth.codingchallenge.ui.theme.PelagoCodingChallengeTheme
 
 private const val HORIZONTAL_PADDING = 32
+private const val SPACER_HEIGHT = 32
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -54,11 +55,7 @@ fun FactScreen(viewModel: FactViewModel) {
                 item {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
                             .padding(vertical = 24.dp, horizontal = HORIZONTAL_PADDING.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         CurrentFact(
                             isLoading = uiState.loading,
@@ -77,7 +74,6 @@ fun FactScreen(viewModel: FactViewModel) {
                     ) { fact ->
                         PreviousFactItem(
                             modifier = Modifier
-                                .padding(vertical = 8.dp, horizontal = 16.dp)
                                 .animateItemPlacement(),
                             fact = fact,
                         ) {
@@ -97,20 +93,28 @@ private fun CurrentFact(
     onClickMoreFacts: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(48.dp),
-                color = MaterialTheme.colorScheme.secondary,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant,
-            )
-        } else {
-            Text(
-                text = fact,
-                textAlign = TextAlign.Center
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateContentSize(),
+            contentAlignment = Alignment.Center
+        ) {
+
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.secondary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                )
+            } else {
+                Text(
+                    text = fact,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(SPACER_HEIGHT.dp))
 
         Button(
             enabled = !isLoading,
@@ -119,7 +123,7 @@ private fun CurrentFact(
             Text(stringResource(id = R.string.button_more_facts))
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(SPACER_HEIGHT.dp))
     }
 }
 
@@ -143,7 +147,8 @@ private fun PreviousFactItem(
     )
 
     SwipeToDismissBox(
-        modifier = modifier,
+        modifier = modifier
+            .padding(vertical = 8.dp, horizontal = 16.dp),
         state = dismissBoxState,
         backgroundContent = {
             Row(
