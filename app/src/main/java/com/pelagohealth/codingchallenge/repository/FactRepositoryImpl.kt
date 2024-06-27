@@ -4,13 +4,10 @@ import com.pelagohealth.codingchallenge.database.dao.FactDao
 import com.pelagohealth.codingchallenge.database.model.FactEntity
 import com.pelagohealth.codingchallenge.network.FactsApiService
 import com.pelagohealth.codingchallenge.repository.mapper.toErrorType
-import com.pelagohealth.codingchallenge.repository.model.ErrorType
 import com.pelagohealth.codingchallenge.repository.model.Fact
 import com.pelagohealth.codingchallenge.repository.model.Resource
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.transform
 import timber.log.Timber
 
@@ -42,7 +39,7 @@ class FactRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Resource.Error(e.toErrorType()))
         }
-    }.flowOn(Dispatchers.IO)
+    }
 
     override suspend fun storeFactInDatabase(fact: Fact) {
         val timestamp = System.currentTimeMillis()
@@ -62,7 +59,7 @@ class FactRepositoryImpl @Inject constructor(
         .transform { factEntity ->
             val facts = factEntity.map { Fact(id = it.id, text = it.text.orEmpty()) }
             emit(facts)
-        }.flowOn(Dispatchers.IO)
+        }
 
     override suspend fun removeFactFromDatabase(fact: Fact) {
         factDao.deleteFact(fact.id)
