@@ -34,8 +34,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pelagohealth.codingchallenge.R
 import com.pelagohealth.codingchallenge.repository.model.Fact
 import com.pelagohealth.codingchallenge.ui.theme.PelagoCodingChallengeTheme
+import com.pelagohealth.codingchallenge.ui.theme.Typography
 
-private const val HORIZONTAL_PADDING = 32
+private const val CURRENT_FACT_HORIZONTAL_PADDING = 32
+private const val PREVIOUS_FACT_HORIZONTAL_PADDING = 16
 private const val SPACER_HEIGHT = 32
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -55,7 +57,7 @@ fun FactScreen(viewModel: FactViewModel) {
                 item {
                     Row(
                         modifier = Modifier
-                            .padding(vertical = 24.dp, horizontal = HORIZONTAL_PADDING.dp),
+                            .padding(vertical = 24.dp, horizontal = CURRENT_FACT_HORIZONTAL_PADDING.dp),
                     ) {
                         CurrentFact(
                             isLoading = uiState.loading,
@@ -68,6 +70,15 @@ fun FactScreen(viewModel: FactViewModel) {
 
                 val previousFacts = uiState.storedFacts
                 if (!previousFacts.isNullOrEmpty()) {
+                    item {
+                        Text(
+                            stringResource(id = R.string.title_previous_viewed_facts),
+                            modifier = Modifier
+                                .padding(horizontal = PREVIOUS_FACT_HORIZONTAL_PADDING.dp, vertical = 8.dp),
+                            style = Typography.titleLarge
+                        )
+                    }
+
                     items(
                         previousFacts,
                         key = { fact -> fact.id },
@@ -148,7 +159,7 @@ private fun PreviousFactItem(
 
     SwipeToDismissBox(
         modifier = modifier
-            .padding(vertical = 8.dp, horizontal = 16.dp),
+            .padding(vertical = 8.dp, horizontal = PREVIOUS_FACT_HORIZONTAL_PADDING.dp),
         state = dismissBoxState,
         backgroundContent = {
             Row(

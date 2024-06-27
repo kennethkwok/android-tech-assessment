@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Pelago Coding Challenge</string>
+
     <string name="button_more_facts">More facts!</string>
+
+    <string name="title_previous_viewed_facts">Previously viewed facts</string>
 </resources>
