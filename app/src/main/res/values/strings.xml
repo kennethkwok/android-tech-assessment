@@ -4,4 +4,11 @@
     <string name="button_more_facts">More facts!</string>
 
     <string name="title_previous_viewed_facts">Previously viewed facts</string>
+
+    <string name="error_api_network">A network error occurred.\nPlease check your internet
+        connection and try again.</string>
+    <string name="error_api_service">A network error occurred.\nPlease try again later.</string>
+    <string name="error_api_not_found">Error connecting to backend.</string>
+    <string name="error_api_server">Error connecting to backend.\nPlease try again later</string>
+    <string name="error_unknown">An unknown error occurred.\nPlease try again.</string>
 </resources>

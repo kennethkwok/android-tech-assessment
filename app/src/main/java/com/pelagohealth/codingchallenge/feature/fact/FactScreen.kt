@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pelagohealth.codingchallenge.R
+import com.pelagohealth.codingchallenge.repository.model.ErrorType
 import com.pelagohealth.codingchallenge.repository.model.Fact
 import com.pelagohealth.codingchallenge.ui.theme.PelagoCodingChallengeTheme
 import com.pelagohealth.codingchallenge.ui.theme.Typography
@@ -40,6 +44,7 @@ import com.pelagohealth.codingchallenge.ui.theme.Typography
 private const val CURRENT_FACT_HORIZONTAL_PADDING = 32
 private const val PREVIOUS_FACT_HORIZONTAL_PADDING = 16
 private const val SPACER_HEIGHT = 32
+private const val ICON_SIZE = 48
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,6 +69,7 @@ fun FactScreen(viewModel: FactViewModel) {
                     ) {
                         CurrentFact(
                             isLoading = uiState.loading,
+                            errorType = uiState.currentFactErrorType,
                             fact = uiState.fact?.text ?: ""
                         ) {
                             viewModel.fetchNewFact()
@@ -104,6 +110,7 @@ fun FactScreen(viewModel: FactViewModel) {
 @Composable
 private fun CurrentFact(
     isLoading: Boolean,
+    errorType: ErrorType?,
     fact: String,
     onClickMoreFacts: () -> Unit
 ) {
@@ -117,10 +124,24 @@ private fun CurrentFact(
 
             if (isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier.size(ICON_SIZE.dp),
                     color = MaterialTheme.colorScheme.secondary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
+            } else if (errorType != null) {
+                val errorMessage = determineErrorMessage(errorType = errorType)
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
+                        Icons.Default.Warning,
+                        modifier = Modifier.padding(vertical = 8.dp).size(ICON_SIZE.dp),
+                        contentDescription = errorMessage
+                    )
+                    Text(
+                        text = errorMessage,
+                        textAlign = TextAlign.Center
+                    )
+                }
             } else {
                 Text(
                     text = fact,
@@ -178,5 +199,16 @@ private fun PreviousFactItem(
                 Text(fact.text)
             },
         )
+    }
+}
+
+@Composable
+private fun determineErrorMessage(errorType: ErrorType): String {
+    return when (errorType) {
+        is ErrorType.Api.Network -> stringResource(id = R.string.error_api_network)
+        is ErrorType.Api.NotFound -> stringResource(id = R.string.error_api_not_found)
+        is ErrorType.Api.Server -> stringResource(id = R.string.error_api_server)
+        is ErrorType.Api.ServiceUnavailable -> stringResource(id = R.string.error_api_service)
+        else -> stringResource(id = R.string.error_unknown) 
     }
 }
