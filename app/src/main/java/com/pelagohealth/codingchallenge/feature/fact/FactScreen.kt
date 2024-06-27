@@ -1,5 +1,6 @@
 package com.pelagohealth.codingchallenge.feature.fact
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -44,20 +45,22 @@ private const val SPACER_HEIGHT = 32
 @Composable
 fun FactScreen(viewModel: FactViewModel) {
     val uiState: FactUIState by viewModel.factUIState.collectAsStateWithLifecycle()
+    val previousFactsVisible = !uiState.storedFacts.isNullOrEmpty()
+    val previousFacts = uiState.storedFacts ?: listOf()
 
     PelagoCodingChallengeTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-            ) {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
                     Row(
                         modifier = Modifier
-                            .padding(vertical = 24.dp, horizontal = CURRENT_FACT_HORIZONTAL_PADDING.dp),
+                            .padding(
+                                vertical = 24.dp,
+                                horizontal = CURRENT_FACT_HORIZONTAL_PADDING.dp
+                            ),
                     ) {
                         CurrentFact(
                             isLoading = uiState.loading,
@@ -68,28 +71,29 @@ fun FactScreen(viewModel: FactViewModel) {
                     }
                 }
 
-                val previousFacts = uiState.storedFacts
-                if (!previousFacts.isNullOrEmpty()) {
-                    item {
+                item {
+                    AnimatedVisibility(previousFactsVisible) {
                         Text(
                             stringResource(id = R.string.title_previous_viewed_facts),
                             modifier = Modifier
-                                .padding(horizontal = PREVIOUS_FACT_HORIZONTAL_PADDING.dp, vertical = 8.dp),
+                                .padding(
+                                    horizontal = PREVIOUS_FACT_HORIZONTAL_PADDING.dp,
+                                    vertical = 8.dp
+                                ),
                             style = Typography.titleLarge
                         )
                     }
+                }
 
-                    items(
-                        previousFacts,
-                        key = { fact -> fact.id },
-                    ) { fact ->
-                        PreviousFactItem(
-                            modifier = Modifier
-                                .animateItemPlacement(),
-                            fact = fact,
-                        ) {
-                            viewModel.removeFact(fact)
-                        }
+                items(
+                    previousFacts,
+                    key = { fact -> fact.id },
+                ) { fact ->
+                    PreviousFactItem(
+                        modifier = Modifier.animateItemPlacement(),
+                        fact = fact,
+                    ) {
+                        viewModel.removeFact(fact)
                     }
                 }
             }
@@ -125,7 +129,7 @@ private fun CurrentFact(
             }
         }
 
-        Spacer(modifier = Modifier.height(SPACER_HEIGHT.dp))
+        Spacer(modifier = Modifier.height((SPACER_HEIGHT / 2).dp))
 
         Button(
             enabled = !isLoading,
