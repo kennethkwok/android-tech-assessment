@@ -4,6 +4,6 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-@Suppress("UndocumentedPublicClass")
+@Suppress("UndocumentedPublicClass", "EmptyClassBlock")
 class PelagoApp : Application() {
 }

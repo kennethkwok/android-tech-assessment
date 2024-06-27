@@ -21,6 +21,8 @@ class FactRepositoryImpl @Inject constructor(
     private val apiService: FactsApiService,
     private val factDao: FactDao,
 ) : FactRepository {
+
+    @SuppressWarnings("TooGenericExceptionCaught")
     override fun getRandomFact() = flow {
         try {
             val response = apiService.getFact()
@@ -29,8 +31,8 @@ class FactRepositoryImpl @Inject constructor(
                 val factDto = response.body();
 
                 val fact = Fact(
-                    id = factDto?.id ?: "",
-                    text = factDto?.text ?: ""
+                    id = factDto?.id.orEmpty(),
+                    text = factDto?.text.orEmpty()
                 )
 
                 emit(Resource.Success(fact))
@@ -57,8 +59,8 @@ class FactRepositoryImpl @Inject constructor(
 
     override fun getFactsFromDatabase(number: Int) = factDao
         .getFacts(number)
-        .transform {
-            val facts = it.map { Fact(id = it.id, text = it.text ?: "") }
+        .transform { factEntity ->
+            val facts = factEntity.map { Fact(id = it.id, text = it.text.orEmpty()) }
             emit(facts)
         }.flowOn(Dispatchers.IO)
 

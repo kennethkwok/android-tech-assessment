@@ -2,9 +2,13 @@
 plugins {
     val hilt_version = "2.51.1"
     val room_version = "2.6.1"
+    val detekt_version = "1.23.6"
 
     id("com.android.application") version "8.2.0" apply false
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
     id("com.google.dagger.hilt.android") version hilt_version apply false
     id("androidx.room") version room_version apply false
+    id("io.gitlab.arturbosch.detekt") version detekt_version
 }
+
+apply(plugin = "io.gitlab.arturbosch.detekt")

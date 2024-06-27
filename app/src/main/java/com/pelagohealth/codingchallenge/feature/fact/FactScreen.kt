@@ -59,7 +59,7 @@ private const val ICON_SIZE = 48
 fun FactScreen(viewModel: FactViewModel) {
     val uiState: FactUIState by viewModel.factUIState.collectAsStateWithLifecycle()
     val previousFactsVisible = !uiState.storedFacts.isNullOrEmpty()
-    val previousFacts = uiState.storedFacts ?: listOf()
+    val previousFacts = uiState.storedFacts.orEmpty()
 
     PelagoCodingChallengeTheme {
         Surface(
@@ -78,7 +78,7 @@ fun FactScreen(viewModel: FactViewModel) {
                         CurrentFact(
                             isLoading = uiState.loading,
                             errorType = uiState.currentFactErrorType,
-                            fact = uiState.fact?.text ?: ""
+                            fact = uiState.fact?.text.orEmpty()
                         ) {
                             viewModel.fetchNewFact()
                         }
@@ -135,7 +135,9 @@ private fun CurrentFact(
 
             if (isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier.testTag(LOADING_SPINNER).size(ICON_SIZE.dp),
+                    modifier = Modifier
+                        .testTag(LOADING_SPINNER)
+                        .size(ICON_SIZE.dp),
                     color = MaterialTheme.colorScheme.secondary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
@@ -145,7 +147,9 @@ private fun CurrentFact(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         Icons.Default.Warning,
-                        modifier = Modifier.padding(vertical = 8.dp).size(ICON_SIZE.dp),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .size(ICON_SIZE.dp),
                         contentDescription = errorMessage
                     )
                     Text(
@@ -223,6 +227,6 @@ private fun determineErrorMessage(errorType: ErrorType): String {
         is ErrorType.Api.NotFound -> stringResource(id = R.string.error_api_not_found)
         is ErrorType.Api.Server -> stringResource(id = R.string.error_api_server)
         is ErrorType.Api.ServiceUnavailable -> stringResource(id = R.string.error_api_service)
-        else -> stringResource(id = R.string.error_unknown) 
+        else -> stringResource(id = R.string.error_unknown)
     }
 }

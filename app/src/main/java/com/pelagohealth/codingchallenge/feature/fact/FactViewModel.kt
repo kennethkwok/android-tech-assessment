@@ -58,6 +58,7 @@ class FactViewModel @Inject constructor(private val factRepository: FactReposito
         }
     }
 
+    @SuppressWarnings("MagicNumber")
     private suspend fun getFactsFromDatabase() {
         factRepository.getFactsFromDatabase(3).collect { facts ->
             Timber.d(facts.toString())

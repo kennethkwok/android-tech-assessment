@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("io.gitlab.arturbosch.detekt")
 }
 
 android {
@@ -145,4 +146,10 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+detekt {
+    toolVersion = "1.23.6"
+    source.setFrom("src/main/java", "src/test/java")
+    basePath = projectDir.toString()
 }

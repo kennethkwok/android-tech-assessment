@@ -12,6 +12,7 @@ import javax.inject.Singleton
 object FactsApiUrlModule {
     @Provides
     @Singleton
+    @SuppressWarnings("FunctionOnlyReturningConstant")
     @Named("BaseUrl")
     fun provideBaseUrl(): String = "https://uselessfacts.jsph.pl/api/v2/"
 }
